@@ -444,6 +444,9 @@ def is_string(argument):
     return all(map(lambda t: type(t) == str, argument))
 
 def jelly_eval(code, arguments):
+    print(f"## TRACE jelly_eval(")          # [c4augustus]
+    print(f"## TRACE ...code=={code}")      # [c4augustus]
+    print(f"## TRACE ...args=={arguments}") # [c4augustus]
     return variadic_chain(parse_code(code)[-1] if code else "", arguments)
 
 def jelly_hash(spec, object):
@@ -487,11 +490,16 @@ def jelly_uneval_real(number):
     return string.lstrip("0") if number else string
 
 def jellify(element, dirty = False):
+    print(f"## TRACE jellify(") # [c4augustus]
+    print(f"## TRACE ...element=={element}") # [c4augustus]
+    print(f"## TRACE ...dirty  =={dirty}") # [c4augustus]
     if element is None:
         return []
     if type(element) == str and dirty:
+        print(f"## TRACE ...type string converted to list=={list(element)}") # [c4augustus]
         return list(element)
     if type(element) in (int, float, complex) or (type(element) == str and len(element) == 1):
+        print(f"## TRACE ...type number is {element}") # [c4augustus]
         return element
     try:
         return [jellify(item, dirty) for item in element]
@@ -775,6 +783,7 @@ def partitions(array):
     return ret
 
 def parse_code(code):
+    print(f"## TRACE parse_code({code})") # [c4augustus]
     lines = regex_flink.findall(code)
     links = [[] for line in lines]
     for index, line in enumerate(lines):
@@ -799,6 +808,7 @@ def parse_code(code):
     return links
 
 def parse_literal(literal_match):
+    print(f"## TRACE parse_literal({literal_match})") # [c4augustus]
     literal = literal_match.group(0)
     if literal[0] in "”⁾":
         return repr(literal[1:].replace("¶", "\n"))
